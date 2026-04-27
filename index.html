@@ -3,179 +3,165 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AI Sentiment Analyzer</title>
+<title>AI Sentiment Pro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body {
-    font-family: 'Segoe UI', sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(-45deg, #141e30, #243b55, #1c92d2, #f2fcfe);
-    background-size: 400% 400%;
-    animation: gradientBG 12s ease infinite;
-    color: white;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364);
+    background-size:400% 400%;
+    animation:gradientBG 10s ease infinite;
+    color:white;
 }
 
 @keyframes gradientBG {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
 
 .container {
-    width: 420px;
-    padding: 30px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    text-align: center;
-    animation: fadeIn 1s ease;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(30px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-h1 {
-    margin-bottom: 10px;
-}
-
-p {
-    font-size: 14px;
-    opacity: 0.7;
+    width:420px;
+    padding:30px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(20px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.6);
+    text-align:center;
 }
 
 textarea {
-    width: 100%;
-    height: 120px;
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    font-size: 14px;
-    transition: 0.3s;
-}
-
-textarea:focus {
-    transform: scale(1.03);
+    width:100%;
+    height:120px;
+    margin-top:15px;
+    padding:12px;
+    border-radius:12px;
+    border:none;
+    outline:none;
 }
 
 button {
-    margin-top: 15px;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #00c6ff, #0072ff);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+    margin-top:10px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(45deg,#00c6ff,#0072ff);
+    color:white;
+    cursor:pointer;
+    transition:.3s;
 }
 
 button:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 15px #00c6ff;
+    transform:scale(1.07);
 }
+
+.clear-btn {background:#444;}
 
 .loader {
-    margin: 15px auto;
-    border: 4px solid rgba(255,255,255,0.2);
-    border-top: 4px solid white;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    animation: spin 1s linear infinite;
-    display: none;
+    margin:15px auto;
+    border:4px solid rgba(255,255,255,0.2);
+    border-top:4px solid white;
+    border-radius:50%;
+    width:25px;height:25px;
+    animation:spin 1s linear infinite;
+    display:none;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes spin {100%{transform:rotate(360deg);}}
+
+#result {margin-top:15px;font-size:22px;font-weight:bold;}
+#confidence {font-size:14px;opacity:0.7;}
+
+.toggle {
+    position:absolute;
+    top:20px;
+    right:20px;
+    cursor:pointer;
 }
 
-#result {
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: bold;
-}
-
-.positive {
-    color: #00ffae;
-    animation: pop 0.4s ease;
-}
-
-.negative {
-    color: #ff5c5c;
-    animation: pop 0.4s ease;
-}
-
-@keyframes pop {
-    from {transform: scale(0.8); opacity: 0;}
-    to {transform: scale(1); opacity: 1;}
+.dark {
+    background:#111 !important;
 }
 </style>
 </head>
 
 <body>
 
+<div class="toggle" onclick="toggleMode()">🌙</div>
+
 <div class="container">
-    <h1>🤖 AI Sentiment</h1>
-    <p>Type text & detect emotion instantly</p>
+<h1>🤖 Sentiment Pro</h1>
+<p>AI emotion detection</p>
 
-    <textarea id="text" placeholder="Type something like 'I love this movie'..."></textarea>
+<textarea id="text" placeholder="Type something..."></textarea>
 
-    <button onclick="predict()">Analyze 🚀</button>
+<button onclick="predict()">Analyze 🚀</button>
+<button class="clear-btn" onclick="clearText()">Clear</button>
 
-    <div class="loader" id="loader"></div>
+<div class="loader" id="loader"></div>
 
-    <div id="result"></div>
+<div id="result"></div>
+<div id="confidence"></div>
 </div>
 
 <script>
-async function predict() {
-    let text = document.getElementById("text").value.trim();
-    let resultDiv = document.getElementById("result");
-    let loader = document.getElementById("loader");
+async function predict(){
+    let text=document.getElementById("text").value.trim();
+    let result=document.getElementById("result");
+    let conf=document.getElementById("confidence");
+    let loader=document.getElementById("loader");
 
-    if (!text) {
-        alert("Enter some text!");
-        return;
-    }
+    if(!text){alert("Enter text!");return;}
 
-    resultDiv.innerText = "";
-    loader.style.display = "block";
+    loader.style.display="block";
+    result.innerText="";
+    conf.innerText="";
 
-    try {
-        let response = await fetch("https://sentiment-ai-api-xth9.onrender.com/predict", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ text: text })
+    try{
+        let res=await fetch("https://sentiment-ai-api-xth9.onrender.com/predict",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({text:text})
         });
 
-        let data = await response.json();
+        let data=await res.json();
 
-        loader.style.display = "none";
+        loader.style.display="none";
 
-        resultDiv.innerText = data.prediction.toUpperCase();
-        resultDiv.className = data.prediction === "positive" ? "positive" : "negative";
+        if(data.prediction==="positive"){
+            result.innerText="😊 POSITIVE";
+            result.style.color="#00ffae";
+        }else{
+            result.innerText="😡 NEGATIVE";
+            result.style.color="#ff5c5c";
+        }
 
-    } catch (error) {
-        loader.style.display = "none";
-        resultDiv.innerText = "⚠️ API Error";
-        resultDiv.className = "negative";
+        if(data.confidence){
+            conf.innerText="Confidence: "+data.confidence;
+        }
+
+    }catch{
+        loader.style.display="none";
+        result.innerText="API Error";
     }
+}
+
+function clearText(){
+    document.getElementById("text").value="";
+    document.getElementById("result").innerText="";
+    document.getElementById("confidence").innerText="";
+}
+
+function toggleMode(){
+    document.body.classList.toggle("dark");
 }
 </script>
 
