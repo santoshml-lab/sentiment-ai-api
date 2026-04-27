@@ -5,7 +5,7 @@ import joblib
 
 app = FastAPI()
 
-model = joblib.load("sentiment_model.pkl")
+model = joblib.load("svm_sentiment_model.pkl")
 
 class TextInput(BaseModel):
     text: str
